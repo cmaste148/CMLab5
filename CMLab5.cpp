@@ -7,45 +7,82 @@
 #include <iomanip>
 #include <fstream>
 
+struct Student
+{
+
+public:
+    std::string name;
+    std::string lnum;
+    float gpa;
+
+    std::string getName() const
+    {
+        return name;
+    }
+    void setName(const std::string &name)
+    {
+        this->name = name;
+    }
+    std::string getLnum() const
+    {
+        return lnum;
+    }
+    void setLnum(const std::string &lnum)
+    {
+        this->lnum = lnum;
+    }
+    float getGpa() const
+    {
+        return gpa;
+    }
+    void setGpa(float gpa)
+    {
+        this->gpa = gpa;
+    }
+};
+
 void introMessage()
 {
-    std::cout << "Welcome, this program will accept a file with student names and lnumbers \n"
+    std::cout << "Welcome, this program will accept a file with student names, lnumbers and GPS's \n"
                  "and will sort them and allow you to check if a name was included in the list." << std::endl << std::endl;
 }
 
-int readFile(std::string names[], std::string lnums[], int max)
+int countFile(std::string const &fileName)
 {
-    bool flag;
     int count = 0;
     std::ifstream infile;
-    std::string fileName;
-    std::cout << "Please enter the name of the file you would like to open" << std::endl;
-    do
+
+    std::string temp;
+    infile.open(fileName);
+    for (int i = 0; i < 100; i++)
     {
-        flag = false;
-        std::cin >> fileName;
-        infile.open(fileName);
-        if (infile.good())
+        if (!infile.eof())
         {
-            for (int i = 0; i < max; i++)
-            {
-                if (!infile.eof())
-                {
-                    infile >> names[i] >> lnums[i];
-                    count++;
-                }
-            }
-            infile.close();
+            infile >> temp;
+            count++;
         }
-        else
+    }
+    infile.close();
+
+
+    return count / 3;
+}
+
+void createArray(Student students[], int &count, std::string &fileName)
+{
+    Student student;
+    std::ifstream infile;
+    infile.open(fileName);
+    for (int i = 0; i < count; i++)
+    {
+        if (!infile.eof())
         {
-            flag = true;
-            std::cout << "File name invalid, Try again" << std::endl;
+            infile >> student.name >> student.lnum >> student.gpa;
         }
+        students [i] = student;
+    }
+    infile.close();
 
-    } while (flag == true);
-
-    return count;
 }
 
 void sortArrays(std::string names[], std::string lnums[], int count)
@@ -74,18 +111,18 @@ void sortArrays(std::string names[], std::string lnums[], int count)
 
 }
 
-void displayArrays(const std::string names[], const std::string lnums[], int count)
+void displayArrays(const Student students[], int count)
 {
-    std::cout << "   Names  |  Lnums  \n ---------|---------- " << std::endl;
+    std::cout << "   Names  |  Lnums  |   GPA   \n ---------|----------|---------- " << std::endl;
     for ( int i = 0; i < count; i++)
     {
-        std::cout << std::setw(9) << names[i]
-        << " | " << lnums[i] << std::endl;
+        std::cout << std::setw(9) << students[i].getName()
+        << " | " << students[i].getLnum() << " | " << students[i].getGpa() << std::endl;
     }
 
 }
 
-bool binSearch(const std::string array[], int count, const std::string term)
+bool binSearch(const std::string array[], int count, const std::string &term)
 {
     // Code adapted from Josephs' video to return bool rather than index
 
@@ -111,4 +148,14 @@ bool binSearch(const std::string array[], int count, const std::string term)
         }
     }
     return found;
+}
+
+bool compareName(Student &start, Student &end)
+{
+   return start.name < end.name;
+}
+
+bool compareLnum(Student &start, Student &end)
+{
+    return start.lnum < end.lnum;
 }

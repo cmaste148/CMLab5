@@ -9,10 +9,16 @@
 
 const int SIZE = 20;
 
+struct Student;
+
+
 void introMessage(); // Display program description
-int readFile(std::string[], std::string[], int); // Read file and add elements to arrays
+int countFile(const std::string &); // Read file
+void createArray(Student [], int& , std::string&);
 void sortArrays(std::string[], std::string[], int); // Insertion sort name array and match LNum array
-void displayArrays(const std::string[], const std::string[], int); // Display arrays to console
+void displayArrays(const Student [], int); // Display arrays to console
 bool binSearch(const std::string[], int, std::string); // Perform a binary search
+bool compareName(Student, Student);
+bool compareLnum(Student, Student);
 
 #endif //CMLAB5_HPP

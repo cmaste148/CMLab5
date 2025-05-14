@@ -9,33 +9,40 @@ Description: Improving Lab2 with structs
 
 #include "CMLab5.hpp"
 #include <iostream>
+#include <fstream>
 
 int main()
 {
-    std::string names[SIZE], lnums[SIZE];
-    std::string search;
 
     introMessage();
-    int count = readFile(names, lnums, SIZE);
-    displayArrays(names, lnums, count);
-    sortArrays(names, lnums, count);
-    std::cout << std::endl;
-    displayArrays(names, lnums, count);
-    for (int i = 0; i < 3; i++)
-    {
-        std::cout << "Enter a name to search for: " << std::endl;
-        std::cin >> search;
 
-        if (binSearch(names, count, search) == true)
+    Student * students = new Student;
+    bool flag;
+    int count;
+    std::ifstream infile;
+    std::string fileName;
+    std::cout << "Please enter the name of the file you would like to open" << std::endl;
+    do
+    {
+        flag = false;
+        std::cin >> fileName;
+        infile.open(fileName);
+        if (infile.good())
         {
-            std::cout << search  << " is in the list "<< std::endl;
+            count = countFile(fileName);
+            createArray(students, count, fileName);
+
         }
         else
         {
-            std::cout << search << " is not in the list "<< std::endl;
+            flag = true;
+            std::cout << "File name invalid, Try again" << std::endl;
         }
 
-    }
+    } while (flag == true);
+
+
+    std::cout << count;
 
     return 0;
 }
